@@ -1,0 +1,14 @@
+{
+  "components\\MediaToolWorkspace.tsx -> pdf-lib": {
+    "id": 9067,
+    "files": [
+      "static/chunks/323.efa754e340e9c058.js"
+    ]
+  },
+  "components\\ToolWorkspace.tsx -> qrcode": {
+    "id": 5819,
+    "files": [
+      "static/chunks/819.c45d80067fda2482.js"
+    ]
+  }
+}
