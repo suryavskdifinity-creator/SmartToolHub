@@ -1,7 +1,22 @@
 import type { Metadata } from "next";
+import { DM_Sans, Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { AppShell } from "@/components/AppShell";
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-dm",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-space",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -35,13 +50,17 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "";
-  const hasRealAdsense =
-    adsenseClient && !adsenseClient.includes("XXXXXXXX");
+  const hasAdsense =
+    Boolean(adsenseClient) && !adsenseClient.includes("XXXXXXXX");
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${dmSans.variable} ${spaceGrotesk.variable}`}
+    >
       <head>
-        {hasRealAdsense && (
+        {hasAdsense && (
           <Script
             id="adsense-init"
             async

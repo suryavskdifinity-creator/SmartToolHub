@@ -8,15 +8,13 @@ import {
   Sun,
   Moon,
   Sparkles,
-  LayoutDashboard,
-  Heart,
   Menu,
   X,
-  ShieldCheck,
   Info,
   Mail,
   Home,
   Wrench,
+  Heart,
 } from "lucide-react";
 import { tools } from "@/lib/tools";
 import { AdSense } from "@/components/AdSense";
@@ -49,6 +47,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("keydown", fn);
   }, []);
 
+  useEffect(() => {
+    setMobile(false);
+  }, [path]);
+
   const results = useMemo(
     () =>
       tools
@@ -75,7 +77,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <header className="topbar">
         <Link href="/" className="brand">
           <span className="brand-mark">
-            <Sparkles size={19} />
+            <Sparkles size={18} />
           </span>
           <span>
             SmartTool<span className="brand-accent">Hub</span>
@@ -83,10 +85,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </Link>
 
         <nav className="header-nav">
-          <Link
-            href="/"
-            className={`header-link ${path === "/" ? "active" : ""}`}
-          >
+          <Link href="/" className={`header-link ${path === "/" ? "active" : ""}`}>
             <Home size={15} /> Home
           </Link>
           <Link href="/#tools" className="header-link">
@@ -118,7 +117,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             onClick={() => setMobile(!mobile)}
             aria-label="Menu"
           >
-            {mobile ? <X /> : <Menu />}
+            {mobile ? <X size={20} /> : <Menu size={20} />}
           </button>
           <button
             className="icon-btn"
@@ -133,101 +132,68 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <div className="ad-top-strip">
-        <AdSense
-          slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_TOP}
-          format="horizontal"
-          className="ad-top"
-        />
+      {/* Mobile menu drawer (replaces sidebar) */}
+      <div className={`mobile-drawer ${mobile ? "open" : ""}`}>
+        <div className="side-label">NAVIGATION</div>
+        <Link href="/" className={`nav-link ${path === "/" ? "active" : ""}`}>
+          <Home size={17} /> Home
+        </Link>
+        <Link href="/#tools" className="nav-link">
+          <Wrench size={17} /> All tools
+        </Link>
+        <Link href="/#favorites" className="nav-link">
+          <Heart size={17} /> Favorites
+        </Link>
+        <Link
+          href="/about"
+          className={`nav-link ${path === "/about" ? "active" : ""}`}
+        >
+          <Info size={17} /> About
+        </Link>
+        <Link
+          href="/contact"
+          className={`nav-link ${path === "/contact" ? "active" : ""}`}
+        >
+          <Mail size={17} /> Contact
+        </Link>
+        <div className="side-label">CATEGORIES</div>
+        {[
+          "Writing",
+          "Language",
+          "Calculators",
+          "Developer",
+          "Security",
+          "Productivity",
+          "Design",
+          "Images",
+          "PDF",
+        ].map((c) => (
+          <Link
+            key={c}
+            href={`/?category=${encodeURIComponent(c)}#tools`}
+            className="nav-link"
+          >
+            {c}
+          </Link>
+        ))}
       </div>
 
-      <div className="app-layout">
-        <aside className={`sidebar ${mobile ? "sidebar-open" : ""}`}>
-          <div className="side-label">WORKSPACE</div>
-          <Link
-            href="/"
-            className={`nav-link ${path === "/" ? "active" : ""}`}
-            onClick={() => setMobile(false)}
-          >
-            <LayoutDashboard size={17} /> Overview
-          </Link>
-          <Link
-            href="/#favorites"
-            className="nav-link"
-            onClick={() => setMobile(false)}
-          >
-            <Heart size={17} /> Favorites
-          </Link>
-          <Link
-            href="/about"
-            className={`nav-link ${path === "/about" ? "active" : ""}`}
-            onClick={() => setMobile(false)}
-          >
-            <Info size={17} /> About
-          </Link>
-          <Link
-            href="/contact"
-            className={`nav-link ${path === "/contact" ? "active" : ""}`}
-            onClick={() => setMobile(false)}
-          >
-            <Mail size={17} /> Contact
-          </Link>
+      <div className="page-wrap">
+        <div className="ad-strip">
+          <AdSense format="auto" className="ad-top" />
+        </div>
 
-          <div className="side-label side-label-tools">DISCOVER</div>
-          {[
-            "Writing",
-            "Language",
-            "Calculators",
-            "Developer",
-            "Security",
-            "Productivity",
-            "Design",
-          ].map((c) => (
-            <Link
-              key={c}
-              href={`/?category=${encodeURIComponent(c)}#tools`}
-              className="nav-link"
-              onClick={() => setMobile(false)}
-            >
-              <span className="nav-dot" /> {c}
-            </Link>
-          ))}
+        <main className="main-content">{children}</main>
 
-          <div className="sidebar-ad">
-            <AdSense
-              slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR}
-              format="vertical"
-              className="ad-sidebar"
-            />
-          </div>
+        <div className="ad-strip">
+          <AdSense format="auto" className="ad-footer" />
+        </div>
 
-          <div className="sidebar-bottom">
-            <div className="privacy-card">
-              <ShieldCheck size={18} />
-              <div>
-                <b>Privacy first</b>
-                <span>Most tools run locally in your browser.</span>
-              </div>
-            </div>
-            <div className="side-foot">SMARTTOOLHUB · 1.1.0</div>
-          </div>
-        </aside>
-
-        <main className="main-content">
-          {children}
-
-          <div className="ad-footer-wrap">
-            <AdSense
-              slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_FOOTER}
-              format="horizontal"
-              className="ad-footer"
-            />
-          </div>
-
-          <footer className="site-footer">
+        <footer className="site-footer">
+          <div className="footer-inner">
             <div className="footer-grid">
               <div className="footer-brand">
-                <Link href="/" className="brand footer-logo">
+                <Link href="/" className="brand">
                   <span className="brand-mark">
                     <Sparkles size={16} />
                   </span>
@@ -240,7 +206,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   calculations and everyday productivity. No account required.
                 </p>
               </div>
-
               <div className="footer-col">
                 <h4>Product</h4>
                 <Link href="/#tools">All tools</Link>
@@ -248,15 +213,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <Link href="/about">About</Link>
                 <Link href="/contact">Contact</Link>
               </div>
-
               <div className="footer-col">
                 <h4>Categories</h4>
                 <Link href="/?category=Writing#tools">Writing</Link>
                 <Link href="/?category=Developer#tools">Developer</Link>
                 <Link href="/?category=Calculators#tools">Calculators</Link>
-                <Link href="/?category=Security#tools">Security</Link>
+                <Link href="/?category=Images#tools">Images</Link>
               </div>
-
               <div className="footer-col">
                 <h4>Contact</h4>
                 <a href="mailto:surajsoftware01@gmail.com">
@@ -268,15 +231,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </p>
               </div>
             </div>
-
             <div className="footer-bottom">
               <span>© {year} SmartToolHub. All rights reserved.</span>
-              <span className="footer-tagline">
-                Useful tools. Less friction. Privacy first.
-              </span>
+              <span>Useful tools. Less friction. Privacy first.</span>
             </div>
-          </footer>
-        </main>
+          </div>
+        </footer>
       </div>
 
       {open && (
@@ -316,17 +276,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </Link>
               ))}
               {!results.length && (
-                <p className="empty-state">
-                  No tools found. Try another search.
-                </p>
+                <p className="empty-state">No tools found. Try another search.</p>
               )}
             </div>
             <div className="command-hint">
               <span>
-                <kbd>↵</kbd> Open tool
-              </span>
-              <span>
-                <kbd>↑↓</kbd> Navigate
+                <kbd>↵</kbd> Open
               </span>
               <span>
                 <kbd>ESC</kbd> Close

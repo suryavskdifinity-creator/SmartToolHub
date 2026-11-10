@@ -670,11 +670,7 @@ HSL: ${hsl}`;
       </div>
 
       <div className="ad-incontent">
-        <AdSense
-          slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_INCONTENT}
-          format="rectangle"
-          className="ad-in-tool"
-        />
+        <AdSense format="auto" className="ad-in-tool" />
       </div>
 
       <div className="workspace-layout">
