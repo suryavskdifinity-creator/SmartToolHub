@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { DM_Sans, Space_Grotesk } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import { AppShell } from "@/components/AppShell";
 
@@ -46,12 +45,14 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
 };
 
+const ADSENSE_CLIENT =
+  process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "ca-pub-7504961737515196";
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "";
   const hasAdsense =
-    Boolean(adsenseClient) && !adsenseClient.includes("XXXXXXXX");
+    Boolean(ADSENSE_CLIENT) && !ADSENSE_CLIENT.includes("XXXXXXXX");
 
   return (
     <html
@@ -60,12 +61,11 @@ export default function RootLayout({
       className={`${dmSans.variable} ${spaceGrotesk.variable}`}
     >
       <head>
+        {/* Must be in real HTML for AdSense site verification crawler */}
         {hasAdsense && (
-          <Script
-            id="adsense-init"
+          <script
             async
-            strategy="afterInteractive"
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
             crossOrigin="anonymous"
           />
         )}

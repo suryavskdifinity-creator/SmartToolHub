@@ -16,10 +16,6 @@ type AdSenseProps = {
 
 const CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "";
 
-/**
- * Uses only NEXT_PUBLIC_ADSENSE_CLIENT_ID.
- * Works with AdSense Auto ads / responsive display units.
- */
 export function AdSense({
   format = "auto",
   className = "",
@@ -30,11 +26,14 @@ export function AdSense({
 
   useEffect(() => {
     if (!hasClient) return;
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch {
-      // ignore load errors in development
-    }
+    const t = window.setTimeout(() => {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch {
+        // ignore
+      }
+    }, 100);
+    return () => window.clearTimeout(t);
   }, [hasClient, uid]);
 
   if (!hasClient) {
