@@ -32,3 +32,4 @@ npm run dev
 - About, Contact (email → surajsoftware01@gmail.com)
 - Translator, QR, Focus Timer, image/PDF tools, calculators, developer tools
 - AdSense script loaded site-wide from your publisher ID only
+"# smarttoolhub-app" 
